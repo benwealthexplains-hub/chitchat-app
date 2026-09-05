@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { subscribeToUserChats } from "../lib/chat";
 import { initials, formatTime } from "../lib/format";
-import BottomNav from "../components/BottomNav";
 
 export default function ChatsList() {
-  const { user, profile } = useAuth();
+  const { user, profile, logout } = useAuth();
   const navigate = useNavigate();
   const [chats, setChats] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +24,13 @@ export default function ChatsList() {
     return chat.memberInfo?.[otherUid] || { name: "Unknown" };
   }
 
+  async function handleAvatarClick() {
+    const sure = window.confirm(`Logged in as ${profile?.name}. Log out?`);
+    if (!sure) return;
+    await logout();
+    navigate("/login", { replace: true });
+  }
+
   return (
     <div className="app-shell">
       <div className="topbar">
@@ -35,7 +41,7 @@ export default function ChatsList() {
             Stay connected, always
           </div>
         </div>
-        <div className="avatar" onClick={() => navigate("/profile")}>
+        <div className="avatar" onClick={handleAvatarClick} title="Tap to log out">
           {initials(profile?.name)}
         </div>
       </div>
@@ -84,8 +90,6 @@ export default function ChatsList() {
       <button className="fab" onClick={() => navigate("/new-chat")}>
         +
       </button>
-
-      <BottomNav />
     </div>
   );
 }

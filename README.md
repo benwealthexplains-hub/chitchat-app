@@ -6,10 +6,21 @@ Yeh tumhari ChitChat app ka working code hai — Email/Password login, real-time
 ## Kya Included Hai (Is Version Me)
 
 - Signup / Login (email + password)
+- **Set PIN screen** (dark theme, numeric keypad) — naya account banane ke baad ek dafa 4-digit PIN set karna hota hai
+- **Lock screen** (dark theme, numeric keypad) — jab bhi koi returning user app kholta hai (naye tab me), pehle PIN maanga jata hai
 - Chats list (real-time)
 - New Chat (koi bhi registered user select karo)
 - 1-on-1 messaging (real-time, Firestore se)
-- Profile / Settings screen (logout)
+- Avatar pe tap karke logout
+
+## PIN Kaise Kaam Karta Hai
+
+1. **Naya user**: Signup karta hai (naam/email/password) → seedha **"Create a PIN"** screen khulti hai → 4-digit PIN daalta hai → wahi PIN dobara confirm karta hai → ab seedha All Chats khul jati hai
+2. **Wahi user, dobara aata hai** (naya tab/browser kholta hai, ya tab close kar ke wapas link kholta hai): agar wo pehle se logged in hai (Firebase session yaad rakhta hai), to seedha **Lock screen** khulti hai — PIN dalte hi All Chats khul jati hai
+3. Agar PIN bhool jaye, "Not you? Log out" bhi button hai jo logout kar deta hai (phir dubara Login/Signup se ana hoga)
+
+Yeh sirf ek extra layer hai taake koi random banda link khol kar chats na dekh sake —
+PIN har account ke apne Firestore profile me **hashed** (SHA-256) store hota hai, plain text nahi.
 
 ## Abhi Included Nahi Hai (Baad Me)
 

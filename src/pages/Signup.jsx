@@ -23,7 +23,7 @@ export default function Signup() {
     setBusy(true);
     try {
       await signup(email.trim().toLowerCase(), password, name.trim());
-      navigate("/chats");
+      navigate("/set-pin");
     } catch (err) {
       setError(friendlyError(err.code));
     } finally {

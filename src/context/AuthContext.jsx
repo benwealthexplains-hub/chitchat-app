@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase";
+import { clearSessionUnlock, hashPin } from "../lib/pin";
 
 const AuthContext = createContext(null);
 
@@ -40,6 +41,7 @@ export function AuthProvider({ children }) {
       email,
       about: "Hey there! I am using ChitChat.",
       photoURL: "",
+      pinHash: "",
       createdAt: serverTimestamp(),
     };
     await setDoc(doc(db, "users", cred.user.uid), userDoc);
@@ -55,6 +57,7 @@ export function AuthProvider({ children }) {
   }
 
   async function logout() {
+    if (user) clearSessionUnlock(user.uid);
     await signOut(auth);
   }
 
@@ -64,7 +67,30 @@ export function AuthProvider({ children }) {
     setProfile(snap.exists() ? snap.data() : null);
   }
 
-  const value = { user, profile, loading, signup, login, logout, refreshProfile };
+  // Hash the PIN client-side and save it on the user's profile.
+  async function setUserPin(pin) {
+    const pinHash = await hashPin(pin);
+    await setDoc(doc(db, "users", user.uid), { pinHash }, { merge: true });
+    setProfile((p) => ({ ...p, pinHash }));
+  }
+
+  // Compare a typed PIN against the stored hash.
+  async function verifyUserPin(pin) {
+    const pinHash = await hashPin(pin);
+    return pinHash === profile?.pinHash;
+  }
+
+  const value = {
+    user,
+    profile,
+    loading,
+    signup,
+    login,
+    logout,
+    refreshProfile,
+    setUserPin,
+    verifyUserPin,
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
