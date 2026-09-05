@@ -12,6 +12,7 @@ Yeh tumhari ChitChat app ka working code hai — Email/Password login, real-time
 - New Chat (koi bhi registered user select karo)
 - 1-on-1 messaging (real-time, Firestore se)
 - Avatar pe tap karke logout
+- **PWA support** — phone ke Home Screen pe "install" ho sakti hai, app jaisa full-screen feel milta hai
 
 ## PIN Kaise Kaam Karta Hai
 
@@ -21,6 +22,24 @@ Yeh tumhari ChitChat app ka working code hai — Email/Password login, real-time
 
 Yeh sirf ek extra layer hai taake koi random banda link khol kar chats na dekh sake —
 PIN har account ke apne Firestore profile me **hashed** (SHA-256) store hota hai, plain text nahi.
+
+## App Ko Phone Pe "Install" Kaise Karein (PWA)
+
+Deploy hone ke baad, apna Vercel wala link **phone ke browser** me kholo:
+
+**Android (Chrome)**:
+1. Link kholo
+2. Upar-right corner me **⋮ (three dots menu)** click karo
+3. **"Install app"** ya **"Add to Home screen"** select karo
+4. Confirm karo — ab Home Screen pe ChitChat ka icon aa jayega
+
+**iPhone (Safari)**:
+1. Link kholo
+2. Neeche **Share button** (□↑) click karo
+3. **"Add to Home Screen"** select karo
+4. **"Add"** confirm karo
+
+Ab app **bilkul native app jaisi** khulegi — koi address bar nahi dikhega, full-screen, Home Screen pe apna icon.
 
 ## Abhi Included Nahi Hai (Baad Me)
 
